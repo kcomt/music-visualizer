@@ -1,30 +1,20 @@
-from pickle import TRUE
-from turtle import width
 import pygame
 import random
 
-
-class Render1:
-    def __init__(self, width, height, bpm):
-        pygame.init()
-        pygame.display.set_caption('kcomtpy')
-
+class circle:
+    def __init__(self, width, height, bpm, gameDisplay):
         self.width = width
         self.height = height
-        self.gameDisplay = pygame.display.set_mode((width, height))
-        self.bpm = bpm
-        self.x = 100
-        self.y = 100
-        self.radius = width/20
-        self.clock = pygame.time.Clock()
-        self.gameRunning = TRUE
         self.randomColor = (random.randint(0, 255),   random.randint(
             0, 255), random.randint(0, 255))
-
-        self.speedInterval = 10
-        self.acceleration = self.speedInterval*0.03
+        self.gameDisplay = gameDisplay
+        self.speedInterval = int(17189*pow(bpm,-1.7))
+        self.radius = width/10
+        self.x = random.randint(0+self.radius, self.width-self.radius)
+        self.y = random.randint(0+self.radius, self.height-self.radius)
         self.dx = random.randint(-self.speedInterval, self.speedInterval)
         self.dy = random.randint(-self.speedInterval, self.speedInterval)
+        self.acceleration = self.speedInterval*0.003
 
         if(self.dx > 0):
             self.ddx = -self.acceleration
@@ -40,7 +30,6 @@ class Render1:
         pygame.draw.circle(self.gameDisplay, self.randomColor, (self.x, self.y), self.radius)
 
     def move(self):
-
         if((self.dx > 0 and self.dx + self.ddx > 0) or (self.dx < 0 and self.dx + self.ddx < 0)):
             self.dx = self.dx + self.ddx
         else:
@@ -70,8 +59,32 @@ class Render1:
         self.x = self.x + self.dx
         self.y = self.y + self.dy
 
-        print("dx",self.dx)
-        print("ddx",self.ddx)
+class Render1:
+    def __init__(self, width, height, bpm):
+        pygame.init()
+        pygame.display.set_caption('kcomtpy')
+        self.width = width
+        self.height = height
+        self.gameDisplay = pygame.display.set_mode((width, height))
+        self.bpm = bpm
+        self.clock = pygame.time.Clock()
+        self.gameRunning = True
+        self.createBalls()
+
+    def createBalls(self):
+        self.balls = []
+        number = random.randint(2,4)
+        for number in range(5):
+            circle1 = circle(self.width, self.height, self.bpm, self.gameDisplay)
+            self.balls.append(circle1)
+
+    def draw(self):
+        for ball in self.balls:
+            ball.draw()
+
+    def move(self):
+        for ball in self.balls:
+            ball.move()
 
     def handleEvents(self):
         for event in pygame.event.get():
@@ -83,6 +96,6 @@ class Render1:
             self.handleEvents()
             self.move()
             pygame.display.update()
-            self.gameDisplay.fill((0, 0, 0))
+            self.gameDisplay.fill((255, 255, 255))
             self.draw()
             self.clock.tick(self.bpm)
