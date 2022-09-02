@@ -14,8 +14,8 @@ class circle:
         self.y = random.randint(0+self.radius, self.height-self.radius)
         self.dx = random.randint(-self.speedInterval, self.speedInterval)
         self.dy = random.randint(-self.speedInterval, self.speedInterval)
-        self.acceleration = self.speedInterval*0.003
-
+        self.acceleration = random.uniform(self.speedInterval*(0.003-0.001), self.speedInterval*(0.003+0.002)) 
+        print(self.speedInterval)
         if(self.dx > 0):
             self.ddx = -self.acceleration
         else:
@@ -73,8 +73,8 @@ class Render1:
 
     def createBalls(self):
         self.balls = []
-        number = random.randint(2,4)
-        for number in range(5):
+        number = random.randint(5,10)
+        for i in range(1):
             circle1 = circle(self.width, self.height, self.bpm, self.gameDisplay)
             self.balls.append(circle1)
 
